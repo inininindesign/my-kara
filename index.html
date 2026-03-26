@@ -79,9 +79,9 @@
       border-radius: 16px; padding: 20px 24px; margin-bottom: 24px;
       box-shadow: 0 8px 32px rgba(0,0,0,0.15);
     }
-    .filter-row { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end; }
-    .filter-group { display: flex; flex-direction: column; gap: 6px; }
-    .filter-group label { font-size: 0.67rem; font-weight: 700; color: #9575c9; text-transform: uppercase; letter-spacing: 0.08em; }
+    .filter-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .filter-group { display: flex; flex-direction: row; align-items: center; gap: 8px; }
+    .filter-group label { font-size: 0.78rem; font-weight: 700; color: #9575c9; white-space: nowrap; flex-shrink: 0; }
 
     input[type="text"], select {
       border: 1.5px solid #e0d4f7; border-radius: 10px; padding: 8px 12px;
@@ -94,35 +94,27 @@
     select { min-width: 130px; cursor: pointer; }
     select option { background: white; color: #2d1b69; }
 
-    .btn-row { display: flex; gap: 8px; }
     .reset-btn {
       padding: 8px 18px; border-radius: 10px; cursor: pointer; font-size: 0.88rem;
       transition: all 0.2s; border: 1.5px solid #e0d4f7;
       background: white; color: #7c3aed; font-family: inherit;
     }
     .reset-btn:hover { background: #faf5ff; border-color: #7c3aed; }
-    .reload-btn {
-      padding: 8px 18px; border-radius: 10px; cursor: pointer; font-size: 0.88rem;
-      transition: all 0.2s; border: none;
-      background: linear-gradient(135deg, #7c3aed, #be185d);
-      color: white; font-family: inherit; font-weight: 600;
-    }
-    .reload-btn:hover { opacity: 0.85; transform: translateY(-1px); }
-
-    .filter-section-label {
+.filter-section-label {
       font-size: 0.67rem; font-weight: 700; color: #b094d8;
       text-transform: uppercase; letter-spacing: 0.1em; margin: 16px 0 8px;
     }
     .decade-buttons, .tag-buttons, .kana-buttons { display: flex; flex-wrap: wrap; gap: 6px; }
     .kana-btn, .decade-btn, .tag-btn {
-      padding: 5px 13px; border: 1.5px solid #e0d4f7; border-radius: 20px;
-      font-size: 0.82rem; cursor: pointer; background: white;
+      padding: 5px 13px; border: 1.5px solid transparent; border-radius: 20px;
+      font-size: 0.93rem; cursor: pointer; background: rgba(124,58,237,0.07);
       color: #7c3aed; transition: all 0.18s; font-weight: 500; font-family: inherit;
     }
-    .kana-btn:hover, .decade-btn:hover { border-color: #7c3aed; background: #faf5ff; }
-    .kana-btn.active, .decade-btn.active { background: linear-gradient(135deg, #7c3aed, #6d28d9); color: white; border-color: transparent; box-shadow: 0 2px 8px rgba(124,58,237,0.35); }
-    .tag-btn:hover { border-color: #be185d; color: #be185d; background: #fff0f6; }
-    .tag-btn.active { background: linear-gradient(135deg, #be185d, #ec4899); color: white; border-color: transparent; box-shadow: 0 2px 8px rgba(190,24,93,0.35); }
+    .kana-btn:hover, .decade-btn:hover { background: rgba(124,58,237,0.14); }
+    .kana-btn.active, .decade-btn.active { background: linear-gradient(135deg, #7c3aed, #6d28d9); color: white; box-shadow: 0 2px 8px rgba(124,58,237,0.35); }
+    .tag-btn { background: rgba(190,24,93,0.07); color: #be185d; }
+    .tag-btn:hover { background: rgba(190,24,93,0.14); }
+    .tag-btn.active { background: linear-gradient(135deg, #be185d, #ec4899); color: white; box-shadow: 0 2px 8px rgba(190,24,93,0.35); }
 
     .results-info { font-size: 0.9rem; color: rgba(255,255,255,0.85); margin-bottom: 14px; padding: 0 4px; font-weight: 500; }
     .results-info strong { color: #fcd34d; font-size: 1.05rem; }
@@ -365,15 +357,14 @@
 
   <div id="appBox" style="display:none">
     <div class="filters">
-      <div class="filter-section-label">検索・絞り込み</div>
       <div class="filter-row">
         <div class="filter-group">
-          <label>曲名/作品名</label>
-          <input type="text" id="searchInput" placeholder="キーワードを入力...">
+          <label>曲名</label>
+          <input type="text" id="searchInput" placeholder="キーワード...">
         </div>
         <div class="filter-group">
           <label>アーティスト</label>
-          <select id="artistSelect"><option value="">すべてのアーティスト</option></select>
+          <select id="artistSelect"><option value="">すべて</option></select>
         </div>
         <div class="filter-group">
           <label>ボーカル</label>
@@ -395,13 +386,7 @@
             <option value="tension_asc">テンション 低い順</option>
           </select>
         </div>
-        <div class="filter-group">
-          <label>&nbsp;</label>
-          <div class="btn-row">
-            <button class="reset-btn" onclick="resetFilters()">リセット</button>
-            <button class="reload-btn" onclick="loadData(true)">↻ 更新</button>
-          </div>
-        </div>
+        <button class="reset-btn" onclick="resetFilters()">リセット</button>
       </div>
       <div class="filter-section-label">アーティスト かな</div>
       <div class="kana-buttons" id="kanaButtons"></div>
