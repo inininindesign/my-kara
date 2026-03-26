@@ -4,37 +4,34 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My☆カラ</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Pacifico&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: 'Noto Sans JP', 'Helvetica Neue', Arial, sans-serif;
-      background: #0d0b1e;
-      background-image:
-        radial-gradient(ellipse at 15% 40%, rgba(109,40,217,0.28) 0%, transparent 50%),
-        radial-gradient(ellipse at 85% 15%, rgba(233,69,96,0.2) 0%, transparent 45%),
-        radial-gradient(ellipse at 60% 85%, rgba(16,185,129,0.1) 0%, transparent 40%);
-      color: #f0f0f0;
+      background: linear-gradient(145deg, #1d0036 0%, #5b21b6 35%, #be185d 70%, #ea580c 100%);
+      background-attachment: fixed;
+      color: #1a1a2e;
       min-height: 100vh;
     }
 
     header {
-      background: rgba(13,11,30,0.82);
+      background: rgba(15,5,40,0.88);
       backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
-      border-bottom: 1px solid rgba(255,255,255,0.08);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
       color: white; padding: 10px 24px;
-      box-shadow: 0 2px 24px rgba(0,0,0,0.4);
+      box-shadow: 0 2px 24px rgba(0,0,0,0.3);
       display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
       position: sticky; top: 0; z-index: 100;
     }
     header h1 {
-      font-size: 1.5rem; letter-spacing: 0.08em; font-weight: 700;
-      background: linear-gradient(135deg, #fff 0%, rgba(200,180,255,0.85) 100%);
+      font-family: 'Pacifico', cursive;
+      font-size: 1.6rem; letter-spacing: 0.02em; font-weight: 400;
+      background: linear-gradient(135deg, #f0abfc 0%, #f9a8d4 50%, #fcd34d 100%);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       background-clip: text;
     }
-    header p { margin-top: 3px; font-size: 0.82rem; color: rgba(255,255,255,0.4); }
 
     #statusBadge {
       font-size: 0.74rem; padding: 4px 12px; border-radius: 20px;
@@ -63,187 +60,189 @@
     .error-box ol { margin-left: 20px; line-height: 2; }
 
     .filters {
-      background: rgba(255,255,255,0.04);
-      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255,255,255,0.09);
+      background: rgba(255,255,255,0.93);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.6);
       border-radius: 16px; padding: 20px 24px; margin-bottom: 24px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
     }
     .filter-row { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end; }
     .filter-group { display: flex; flex-direction: column; gap: 6px; }
-    .filter-group label { font-size: 0.67rem; font-weight: 700; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.08em; }
+    .filter-group label { font-size: 0.67rem; font-weight: 700; color: #9575c9; text-transform: uppercase; letter-spacing: 0.08em; }
 
     input[type="text"], select {
-      border: 1px solid rgba(255,255,255,0.14); border-radius: 10px; padding: 8px 12px;
+      border: 1.5px solid #e0d4f7; border-radius: 10px; padding: 8px 12px;
       font-size: 0.95rem; outline: none; transition: border-color 0.2s, background 0.2s;
-      background: rgba(255,255,255,0.07); color: #f0f0f0; font-family: inherit;
+      background: white; color: #2d1b69; font-family: inherit;
     }
-    input[type="text"]:focus, select:focus { border-color: #a78bfa; background: rgba(167,139,250,0.08); }
-    input[type="text"]::placeholder { color: rgba(255,255,255,0.25); }
+    input[type="text"]:focus, select:focus { border-color: #7c3aed; background: #faf5ff; }
+    input[type="text"]::placeholder { color: #c4aff0; }
     input[type="text"] { width: 220px; }
     select { min-width: 130px; cursor: pointer; }
-    select option { background: #1e1a38; color: #f0f0f0; }
+    select option { background: white; color: #2d1b69; }
 
     .btn-row { display: flex; gap: 8px; }
     .reset-btn {
       padding: 8px 18px; border-radius: 10px; cursor: pointer; font-size: 0.88rem;
-      transition: all 0.2s; border: 1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.65); font-family: inherit;
+      transition: all 0.2s; border: 1.5px solid #e0d4f7;
+      background: white; color: #7c3aed; font-family: inherit;
     }
-    .reset-btn:hover { background: rgba(255,255,255,0.12); }
+    .reset-btn:hover { background: #faf5ff; border-color: #7c3aed; }
     .reload-btn {
       padding: 8px 18px; border-radius: 10px; cursor: pointer; font-size: 0.88rem;
-      transition: all 0.2s; border: 1px solid rgba(167,139,250,0.35);
-      background: rgba(167,139,250,0.12); color: #c4b5fd; font-family: inherit;
+      transition: all 0.2s; border: none;
+      background: linear-gradient(135deg, #7c3aed, #be185d);
+      color: white; font-family: inherit; font-weight: 600;
     }
-    .reload-btn:hover { background: rgba(167,139,250,0.22); }
+    .reload-btn:hover { opacity: 0.85; transform: translateY(-1px); }
 
     .filter-section-label {
-      font-size: 0.67rem; font-weight: 700; color: rgba(255,255,255,0.3);
+      font-size: 0.67rem; font-weight: 700; color: #b094d8;
       text-transform: uppercase; letter-spacing: 0.1em; margin: 16px 0 8px;
     }
     .decade-buttons, .tag-buttons, .kana-buttons { display: flex; flex-wrap: wrap; gap: 6px; }
     .kana-btn, .decade-btn, .tag-btn {
-      padding: 5px 13px; border: 1px solid rgba(255,255,255,0.15); border-radius: 20px;
-      font-size: 0.82rem; cursor: pointer; background: rgba(255,255,255,0.05);
-      color: rgba(255,255,255,0.6); transition: all 0.18s; font-weight: 500; font-family: inherit;
+      padding: 5px 13px; border: 1.5px solid #e0d4f7; border-radius: 20px;
+      font-size: 0.82rem; cursor: pointer; background: white;
+      color: #7c3aed; transition: all 0.18s; font-weight: 500; font-family: inherit;
     }
-    .kana-btn:hover, .decade-btn:hover { border-color: #a78bfa; color: #c4b5fd; background: rgba(167,139,250,0.1); }
-    .kana-btn.active, .decade-btn.active { background: #7c3aed; color: white; border-color: #7c3aed; }
-    .tag-btn:hover { border-color: #e94560; color: #fda4af; background: rgba(233,69,96,0.1); }
-    .tag-btn.active { background: #e94560; color: white; border-color: #e94560; }
+    .kana-btn:hover, .decade-btn:hover { border-color: #7c3aed; background: #faf5ff; }
+    .kana-btn.active, .decade-btn.active { background: linear-gradient(135deg, #7c3aed, #6d28d9); color: white; border-color: transparent; box-shadow: 0 2px 8px rgba(124,58,237,0.35); }
+    .tag-btn:hover { border-color: #be185d; color: #be185d; background: #fff0f6; }
+    .tag-btn.active { background: linear-gradient(135deg, #be185d, #ec4899); color: white; border-color: transparent; box-shadow: 0 2px 8px rgba(190,24,93,0.35); }
 
-    .results-info { font-size: 0.88rem; color: rgba(255,255,255,0.38); margin-bottom: 14px; padding: 0 4px; }
-    .results-info strong { color: #a78bfa; }
+    .results-info { font-size: 0.9rem; color: rgba(255,255,255,0.85); margin-bottom: 14px; padding: 0 4px; font-weight: 500; }
+    .results-info strong { color: #fcd34d; font-size: 1.05rem; }
 
-    .song-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 14px; }
+    .song-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
 
     .song-card {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.09);
-      border-radius: 14px; padding: 12px 14px;
-      transition: transform 0.18s, box-shadow 0.18s, background 0.18s, border-color 0.18s;
-      border-left: 3px solid rgba(255,255,255,0.08);
+      background: white;
+      border: 1px solid rgba(255,255,255,0.6);
+      border-radius: 14px; padding: 14px 16px;
+      transition: transform 0.18s, box-shadow 0.18s;
+      border-left: 4px solid #e0d4f7;
       position: relative; overflow: hidden;
-    }
-    .song-card::after {
-      content: '♪';
-      position: absolute; right: 6px; bottom: 2px;
-      font-size: 4.5rem; opacity: 0.045; line-height: 1;
-      pointer-events: none; user-select: none;
     }
     .song-card:hover {
       transform: translateY(-3px);
-      background: rgba(255,255,255,0.08);
-      border-color: rgba(255,255,255,0.16);
-      box-shadow: 0 12px 32px rgba(0,0,0,0.35);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.2);
     }
     .song-card.vocal-male   { border-left-color: #60a5fa; }
     .song-card.vocal-female { border-left-color: #f472b6; }
     .song-card.vocal-double { border-left-color: #c084fc; }
 
+    .card-body  { display: flex; align-items: center; gap: 10px; }
+    .card-main  { flex: 1; min-width: 0; }
+    .card-side  { flex-shrink: 0; width: 54px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; }
+    .tension-big {
+      font-size: 2.6rem; font-weight: 900; line-height: 1;
+      background-clip: text; -webkit-background-clip: text; color: transparent;
+    }
+    .tension-big.tension-lo { background-image: linear-gradient(160deg, #60a5fa, #3b82f6); }
+    .tension-big.tension-md { background-image: linear-gradient(160deg, #f59e0b, #ea580c); }
+    .tension-big.tension-hi { background-image: linear-gradient(160deg, #ef4444, #ec4899); }
+    .tension-label { font-size: 0.6rem; font-weight: 700; color: #c4aff0; text-transform: uppercase; letter-spacing: 0.08em; }
+
     .edit-btn {
-      position: absolute; top: 10px; right: 10px;
+      position: absolute; top: 8px; right: 8px;
       background: none; border: none; cursor: pointer;
       font-size: 0.82rem; opacity: 0; padding: 3px; line-height: 1;
       transition: opacity 0.18s; z-index: 1;
     }
-    .song-card:hover .edit-btn { opacity: 0.45; }
+    .song-card:hover .edit-btn { opacity: 0.5; }
     .edit-btn:hover { opacity: 1 !important; }
 
-    .song-year   { font-size: 0.74rem; color: rgba(255,255,255,0.38); font-weight: 600; letter-spacing: 0.05em; }
-    .song-title  { font-size: 1.02rem; font-weight: 700; margin: 6px 0 3px; color: #f0f0f0; line-height: 1.35; }
-    .song-artist { font-size: 0.86rem; color: rgba(255,255,255,0.5); margin-bottom: 8px; }
+    .song-year   { font-size: 0.74rem; color: #9575c9; font-weight: 600; letter-spacing: 0.05em; }
+    .song-title  { font-size: 1.08rem; font-weight: 700; margin: 5px 0 3px; color: #1a0050; line-height: 1.35; }
+    .song-artist { font-size: 0.9rem; color: #6d4c9e; margin-bottom: 8px; font-weight: 500; }
     .song-tags   { display: flex; flex-wrap: wrap; gap: 4px; }
-    .tag-pill    { padding: 2px 9px; border-radius: 12px; font-size: 0.73rem; font-weight: 500; border: 1px solid transparent; }
+    .tag-pill    { padding: 2px 9px; border-radius: 12px; font-size: 0.73rem; font-weight: 600; border: 1px solid transparent; }
 
-    .tag-歌える       { background: rgba(59,130,246,0.2);  color: #93c5fd; border-color: rgba(59,130,246,0.3); }
-    .tag-くるカラ     { background: rgba(16,185,129,0.2);  color: #6ee7b7; border-color: rgba(16,185,129,0.3); }
-    .tag-カラオケ     { background: rgba(245,158,11,0.2);  color: #fcd34d; border-color: rgba(245,158,11,0.3); }
-    .tag-大好き       { background: rgba(244,114,182,0.2); color: #f9a8d4; border-color: rgba(244,114,182,0.3); }
-    .tag-自己満       { background: rgba(168,85,247,0.2);  color: #d8b4fe; border-color: rgba(168,85,247,0.3); }
-    .tag-バラード感涙 { background: rgba(14,165,233,0.2);  color: #7dd3fc; border-color: rgba(14,165,233,0.3); }
-    .tag-映画アニメ   { background: rgba(249,115,22,0.2);  color: #fdba74; border-color: rgba(249,115,22,0.3); }
-    .tag-センス       { background: rgba(20,184,166,0.2);  color: #5eead4; border-color: rgba(20,184,166,0.3); }
-    .tag-ハモり       { background: rgba(168,85,247,0.2);  color: #d8b4fe; border-color: rgba(168,85,247,0.3); }
+    .tag-歌える       { background: #dbeafe; color: #1d4ed8; border-color: #bfdbfe; }
+    .tag-くるカラ     { background: #d1fae5; color: #065f46; border-color: #a7f3d0; }
+    .tag-カラオケ     { background: #fef3c7; color: #92400e; border-color: #fde68a; }
+    .tag-大好き       { background: #fce7f3; color: #9d174d; border-color: #fbcfe8; }
+    .tag-自己満       { background: #ede9fe; color: #5b21b6; border-color: #ddd6fe; }
+    .tag-バラード感涙 { background: #e0f2fe; color: #0c4a6e; border-color: #bae6fd; }
+    .tag-映画アニメ   { background: #ffedd5; color: #9a3412; border-color: #fed7aa; }
+    .tag-センス       { background: #ccfbf1; color: #134e4a; border-color: #99f6e4; }
+    .tag-ハモり       { background: #f3e8ff; color: #6b21a8; border-color: #e9d5ff; }
 
     .vocal-badge {
       display: inline-block; padding: 2px 8px; border-radius: 12px;
       font-size: 0.71rem; font-weight: 600; margin-left: 6px;
     }
-    .vocal-male   .vocal-badge { background: rgba(96,165,250,0.2);  color: #93c5fd; border: 1px solid rgba(96,165,250,0.3); }
-    .vocal-female .vocal-badge { background: rgba(244,114,182,0.2); color: #f9a8d4; border: 1px solid rgba(244,114,182,0.3); }
-    .vocal-double .vocal-badge { background: rgba(192,132,252,0.2); color: #d8b4fe; border: 1px solid rgba(192,132,252,0.3); }
+    .vocal-male   .vocal-badge { background: #dbeafe; color: #1d4ed8; border: 1px solid #bfdbfe; }
+    .vocal-female .vocal-badge { background: #fce7f3; color: #9d174d; border: 1px solid #fbcfe8; }
+    .vocal-double .vocal-badge { background: #ede9fe; color: #5b21b6; border: 1px solid #ddd6fe; }
 
-    .tension-badge {
-      display: inline-flex; align-items: center; justify-content: center;
-      width: 20px; height: 20px; border-radius: 50%;
-      font-size: 0.67rem; font-weight: 700; margin-left: 5px; vertical-align: middle;
-    }
-    .tension-lo { background: rgba(59,130,246,0.25);  color: #93c5fd; }
-    .tension-md { background: rgba(245,158,11,0.25);  color: #fcd34d; }
-    .tension-hi { background: rgba(239,68,68,0.28);   color: #fca5a5; }
+    .tension-lo { color: #3b82f6; }
+    .tension-md { color: #f59e0b; }
+    .tension-hi { color: #ef4444; }
 
-    .no-results { text-align:center; padding:60px 20px; color:rgba(255,255,255,0.28); font-size:1.05rem; grid-column:1/-1; }
+    .no-results { text-align:center; padding:60px 20px; color:rgba(255,255,255,0.5); font-size:1.05rem; grid-column:1/-1; }
 
     .add-btn {
       padding: 8px 20px; border-radius: 10px; cursor: pointer; font-size: 0.9rem;
-      background: linear-gradient(135deg, #e94560 0%, #c73652 100%);
+      background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);
       color: white; border: none; font-weight: 600;
       transition: opacity 0.2s, transform 0.15s; font-family: inherit; white-space: nowrap;
-      box-shadow: 0 4px 14px rgba(233,69,96,0.35);
+      box-shadow: 0 4px 14px rgba(190,24,93,0.4);
     }
     .add-btn:hover { opacity: 0.88; transform: translateY(-1px); }
 
     .modal-overlay {
       display: none; position: fixed; inset: 0;
-      background: rgba(0,0,0,0.65);
-      backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
       z-index: 1000; align-items: center; justify-content: center; padding: 16px;
     }
     .modal-overlay.open { display: flex; }
     .modal {
-      background: #1a1535; border: 1px solid rgba(255,255,255,0.12);
+      background: white; border: 1px solid rgba(255,255,255,0.9);
       border-radius: 20px; padding: 28px;
       width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto;
-      box-shadow: 0 24px 64px rgba(0,0,0,0.6);
+      box-shadow: 0 24px 64px rgba(0,0,0,0.25);
     }
-    .modal h2 { font-size: 1.15rem; margin-bottom: 20px; color: #f0f0f0; }
+    .modal h2 { font-size: 1.15rem; margin-bottom: 20px; color: #1a0050; }
     .modal-field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 14px; }
-    .modal-field label { font-size: 0.68rem; font-weight: 700; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.07em; }
-    .modal-field label .req { color: #e94560; }
+    .modal-field label { font-size: 0.68rem; font-weight: 700; color: #9575c9; text-transform: uppercase; letter-spacing: 0.07em; }
+    .modal-field label .req { color: #be185d; }
     .modal-field input, .modal-field select {
-      border: 1px solid rgba(255,255,255,0.14); border-radius: 8px; padding: 9px 12px;
+      border: 1.5px solid #e0d4f7; border-radius: 8px; padding: 9px 12px;
       font-size: 0.95rem; outline: none; transition: border-color 0.2s;
-      background: rgba(255,255,255,0.07); color: #f0f0f0; font-family: inherit;
+      background: white; color: #2d1b69; font-family: inherit;
     }
-    .modal-field input:focus, .modal-field select:focus { border-color: #a78bfa; }
-    .modal-field input::placeholder { color: rgba(255,255,255,0.25); }
-    .modal-field select option { background: #1e1a38; }
+    .modal-field input:focus, .modal-field select:focus { border-color: #7c3aed; background: #faf5ff; }
+    .modal-field input::placeholder { color: #c4aff0; }
+    .modal-field select option { background: white; color: #2d1b69; }
     .modal-tags { display: flex; flex-wrap: wrap; gap: 6px; }
     .modal-tag-cb { display: none; }
     .modal-tag-label {
-      padding: 5px 12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 20px;
+      padding: 5px 12px; border: 1.5px solid #e0d4f7; border-radius: 20px;
       font-size: 0.82rem; cursor: pointer; transition: all 0.2s;
-      color: rgba(255,255,255,0.65); background: rgba(255,255,255,0.05);
+      color: #7c3aed; background: white; font-weight: 500;
     }
-    .modal-tag-cb:checked + .modal-tag-label { background: #e94560; color: white; border-color: #e94560; }
+    .modal-tag-cb:checked + .modal-tag-label { background: linear-gradient(135deg, #be185d, #ec4899); color: white; border-color: transparent; }
     .modal-actions { display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end; }
     .modal-cancel {
-      padding: 9px 20px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.15);
-      background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.65);
+      padding: 9px 20px; border-radius: 8px; border: 1.5px solid #e0d4f7;
+      background: white; color: #7c3aed;
       cursor: pointer; font-size: 0.9rem; font-family: inherit;
     }
+    .modal-cancel:hover { background: #faf5ff; }
     .modal-submit {
       padding: 9px 20px; border-radius: 8px; border: none;
       background: linear-gradient(135deg, #7c3aed, #6d28d9);
       color: white; cursor: pointer; font-size: 0.9rem; font-weight: 600;
-      font-family: inherit; box-shadow: 0 4px 12px rgba(109,40,217,0.35);
+      font-family: inherit; box-shadow: 0 4px 12px rgba(109,40,217,0.3);
     }
     .modal-submit:hover { opacity: 0.9; }
     .modal-submit:disabled { opacity: 0.5; cursor: not-allowed; }
     .modal-msg { font-size: 0.85rem; margin-top: 10px; text-align: center; min-height: 20px; }
-    .modal-msg.ok  { color: #6ee7b7; }
-    .modal-msg.err { color: #fca5a5; }
+    .modal-msg.ok  { color: #059669; }
+    .modal-msg.err { color: #dc2626; }
 
     @media (max-width: 640px) {
       header { padding: 16px; }
@@ -586,14 +585,19 @@ function render() {
     const vc=s.vocal==='男性'?'vocal-male':s.vocal==='女性'?'vocal-female':s.vocal==='ダブル'?'vocal-double':'';
     const badge=s.vocal?`<span class="vocal-badge">${s.vocal}</span>`:'';
     const tc=s.tension?(s.tension<=3?'tension-lo':s.tension<=6?'tension-md':'tension-hi'):'';
-    const tbadge=s.tension?`<span class="tension-badge ${tc}">${s.tension}</span>`:'';
     const pills=s.tags.map(t=>`<span class="tag-pill ${TAG_CLASS[t]||''}">${t}</span>`).join('');
+    const side=s.tension?`<div class="card-side"><div class="tension-big ${tc}">${s.tension}</div><div class="tension-label">テンション</div></div>`:'';
     return `<div class="song-card ${vc}">
       <button class="edit-btn" onclick="event.stopPropagation();openEditModal(${i})" title="編集">✏️</button>
-      <div class="song-year">${s.year?s.year+'年':'年代不明'}${tbadge}${badge}</div>
-      <div class="song-title">${s.title}</div>
-      <div class="song-artist">${s.artist}</div>
-      ${pills?`<div class="song-tags">${pills}</div>`:''}
+      <div class="card-body">
+        <div class="card-main">
+          <div class="song-year">${s.year?s.year+'年':'年代不明'}${badge}</div>
+          <div class="song-title">${s.title}</div>
+          <div class="song-artist">${s.artist}</div>
+          ${pills?`<div class="song-tags">${pills}</div>`:''}
+        </div>
+        ${side}
+      </div>
     </div>`;
   }).join('');
 }
