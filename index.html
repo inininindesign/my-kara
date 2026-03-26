@@ -509,8 +509,8 @@ function showApp() {
 function kanaFirstSort(a, b) {
   const isAlphaA = /^[A-Za-z]/.test(a);
   const isAlphaB = /^[A-Za-z]/.test(b);
-  if(isAlphaA && !isAlphaB) return -1;
-  if(!isAlphaA && isAlphaB) return 1;
+  if(isAlphaA && !isAlphaB) return 1;
+  if(!isAlphaA && isAlphaB) return -1;
   return a.localeCompare(b, 'ja');
 }
 
