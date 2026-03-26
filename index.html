@@ -246,10 +246,14 @@
     .modal-msg.err { color: #dc2626; }
 
     @media (max-width: 640px) {
-      header { padding: 16px; }
+      header { padding: 14px 16px; }
       header h1 { font-size: 1.25rem; }
-      .filter-row { flex-direction: column; }
-      input[type="text"] { width: 100%; }
+      .filter-row { flex-direction: column; align-items: stretch; gap: 8px; }
+      .filter-group { flex-direction: row; align-items: center; gap: 8px; }
+      .filter-group label { width: 5.5em; flex-shrink: 0; text-align: right; }
+      .filter-group input[type="text"],
+      .filter-group select { flex: 1; min-width: 0; width: 100%; box-sizing: border-box; }
+      .reset-btn { align-self: flex-end; }
       .song-grid { grid-template-columns: 1fr; }
     }
   </style>
