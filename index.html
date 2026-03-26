@@ -568,7 +568,7 @@ function render() {
       case 'year_asc':     return (a.year||9999)-(b.year||9999);
       case 'year_desc':    return (b.year||0)-(a.year||0);
       case 'title_asc':    return a.title.localeCompare(b.title,'ja');
-      case 'artist_asc':   return (a.artistKana||a.artist).localeCompare(b.artistKana||b.artist,'ja');
+      case 'artist_asc':   return kanaFirstSort(a.artistKana||a.artist, b.artistKana||b.artist);
       case 'tension_desc': return (b.tension||0)-(a.tension||0);
       case 'tension_asc':  return (a.tension||9999)-(b.tension||9999);
       default: return 0;
