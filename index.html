@@ -176,6 +176,7 @@
     .tag-映画アニメ   { background: #ffedd5; color: #9a3412; border-color: #fed7aa; }
     .tag-センス       { background: #ccfbf1; color: #134e4a; border-color: #99f6e4; }
     .tag-ハモり       { background: #f3e8ff; color: #6b21a8; border-color: #e9d5ff; }
+    .tag-オーケストラ { background: #fef9c3; color: #854d0e; border-color: #fde68a; }
 
 
     .tension-lo { color: #3b82f6; }
@@ -407,9 +408,9 @@
 const SHEET_ID  = '1hLwdo0GoJmoJOBD-8krJd7hsai8mExWDveZgh1vwc3A';
 const GID       = '0';
 const CSV_URL   = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${GID}`;
-const CACHE_KEY = 'oshikara_filter_v3';
+const CACHE_KEY = 'oshikara_filter_v4';
 const TTL_MS    = 30 * 60 * 1000;
-const ALL_TAGS  = ['歌える','くるカラ','カラオケ','バラード・感涙','アニメ・映画','ハモり'];
+const ALL_TAGS  = ['歌える','くるカラ','カラオケ','バラード・感涙','アニメ・映画','ハモり','オーケストラ'];
 
 function hashStr(s) { let h=5381; for(let i=0;i<s.length;i++) h=Math.imul(h,33)^s.charCodeAt(i); return (h>>>0).toString(36); }
 function timeAgo(ts) { const s=Math.floor((Date.now()-ts)/1000); if(s<60) return s+'秒前'; if(s<3600) return Math.floor(s/60)+'分前'; return Math.floor(s/3600)+'時間前'; }
@@ -551,7 +552,7 @@ function buildTagButtons() {
 
 const TAG_CLASS = {
   '歌える':'tag-歌える','くるカラ':'tag-くるカラ','カラオケ':'tag-カラオケ',
-  'バラード・感涙':'tag-バラード感涙','アニメ・映画':'tag-映画アニメ','ハモり':'tag-ハモり',
+  'バラード・感涙':'tag-バラード感涙','アニメ・映画':'tag-映画アニメ','ハモり':'tag-ハモり','オーケストラ':'tag-オーケストラ',
 };
 
 function render() {
