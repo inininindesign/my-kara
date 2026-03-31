@@ -14,7 +14,7 @@ git push --set-upstream origin main
 
 echo "⏳ デプロイ待機中..."
 
-URL="https://inininindesign.github.io/oshi-kara/"
+URL="https://inininindesign.github.io/my-kara/"
 for i in $(seq 1 40); do
   sleep 5
   LIVE=$(curl -s "$URL" | grep -o "deploy:[0-9]*" | head -1)
