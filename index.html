@@ -261,7 +261,7 @@
       .song-grid { grid-template-columns: 1fr; }
     }
   </style>
-<!-- deploy:1774924741 --></head>
+<!-- deploy:1774926590 --></head>
 <body>
 <header>
   <div>
@@ -385,12 +385,12 @@
         <div class="filter-group">
           <label>並べ替え</label>
           <select id="sortSelect">
-            <option value="tension_desc" selected>テンション 高い順</option>
+            <option value="tension_desc">テンション 高い順</option>
             <option value="tension_asc">テンション 低い順</option>
             <option value="year_asc">発売年 古い順</option>
             <option value="year_desc">発売年 新しい順</option>
             <option value="title_asc">曲名 50音順</option>
-            <option value="artist_asc">アーティスト 50音順</option>
+            <option value="artist_asc" selected>アーティスト 50音順</option>
           </select>
         </div>
       </div>
@@ -412,7 +412,7 @@
 const SHEET_ID  = '1hLwdo0GoJmoJOBD-8krJd7hsai8mExWDveZgh1vwc3A';
 const GID       = '0';
 const CSV_URL   = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${GID}`;
-const CACHE_KEY = 'oshikara_filter_v7';
+const CACHE_KEY = 'oshikara_filter_v8';
 const TTL_MS    = 30 * 60 * 1000;
 const ALL_TAGS  = ['カラオケ','バラード・感涙','アニメ・映画','ハモり','オーケストラ'];
 
@@ -500,7 +500,7 @@ async function loadData(force=false) {
   } finally { fetching=false; }
 }
 
-let selectedDecade=null, selectedTags=new Set(), selectedArtist='', selectedVocal='', searchText='', selectedSort='tension_desc', selectedKana=null;
+let selectedDecade=null, selectedTags=new Set(), selectedArtist='', selectedVocal='', searchText='', selectedSort='artist_asc', selectedKana=null;
 
 function showApp() {
   document.getElementById('loadingBox').style.display='none';
@@ -639,11 +639,11 @@ function render() {
 }
 
 function resetFilters() {
-  selectedDecade=null; selectedTags.clear(); selectedArtist=''; selectedVocal=''; searchText=''; selectedSort='tension_desc'; selectedKana=null;
+  selectedDecade=null; selectedTags.clear(); selectedArtist=''; selectedVocal=''; searchText=''; selectedSort='artist_asc'; selectedKana=null;
   document.getElementById('searchInput').value='';
   document.getElementById('artistSelect').value='';
   document.getElementById('vocalSelect').value='';
-  document.getElementById('sortSelect').value='tension_desc';
+  document.getElementById('sortSelect').value='artist_asc';
   buildKanaButtons(); buildDecadeButtons(); buildTagButtons(); render();
 }
 
