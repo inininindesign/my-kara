@@ -10,7 +10,7 @@ fi
 
 git add index.html deploy.sh
 git commit -m "update"
-git push
+git push --set-upstream origin main
 
 echo "⏳ デプロイ待機中..."
 

@@ -105,6 +105,9 @@
       text-transform: uppercase; letter-spacing: 0.1em; margin: 16px 0 8px;
     }
     .decade-buttons, .tag-buttons, .kana-buttons { display: flex; flex-wrap: wrap; gap: 6px; }
+    .kana-buttons { max-height: 38px; overflow: hidden; transition: max-height 0.25s ease; }
+    .kana-buttons.expanded { max-height: 400px; }
+    .kana-toggle-btn { margin-top: 6px; padding: 3px 12px; border: 1.5px solid #c4b5fd; border-radius: 20px; font-size: 0.8rem; cursor: pointer; background: transparent; color: #7c3aed; font-family: inherit; font-weight: 600; }
     .kana-btn, .decade-btn, .tag-btn {
       padding: 5px 13px; border: 1.5px solid transparent; border-radius: 20px;
       font-size: 0.93rem; cursor: pointer; background: rgba(124,58,237,0.07);
@@ -258,7 +261,7 @@
       .song-grid { grid-template-columns: 1fr; }
     }
   </style>
-<!-- deploy:1774921280 --></head>
+<!-- deploy:1774922637 --></head>
 <body>
 <header>
   <div>
@@ -393,6 +396,7 @@
       </div>
       <div class="filter-section-label">アーティスト かな</div>
       <div class="kana-buttons" id="kanaButtons"></div>
+      <button class="kana-toggle-btn" id="kanaToggle" onclick="toggleKana()">すべて表示 ▼</button>
       <div class="filter-section-label">年代</div>
       <div class="decade-buttons" id="decadeButtons"></div>
       <div class="filter-section-label">タグ</div>
@@ -515,6 +519,12 @@ function kanaFirstSort(a, b) {
   return a.localeCompare(b, 'ja');
 }
 
+let kanaExpanded = false;
+function toggleKana() {
+  kanaExpanded = !kanaExpanded;
+  document.getElementById('kanaButtons').classList.toggle('expanded', kanaExpanded);
+  document.getElementById('kanaToggle').textContent = kanaExpanded ? '閉じる ▲' : 'すべて表示 ▼';
+}
 function buildKanaButtons() {
   const kanas=[...new Set(SONGS.map(s=>s.artistKana).filter(Boolean))].sort(kanaFirstSort);
   const c=document.getElementById('kanaButtons'); c.innerHTML='';
@@ -525,6 +535,8 @@ function buildKanaButtons() {
     btn.onclick=()=>{ selectedKana=selectedKana===k?null:k; buildKanaButtons(); render(); };
     c.appendChild(btn);
   });
+  const toggle = document.getElementById('kanaToggle');
+  toggle.style.display = kanas.length <= 6 ? 'none' : '';
 }
 
 function buildDecadeButtons() {
