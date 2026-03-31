@@ -261,7 +261,7 @@
       .song-grid { grid-template-columns: 1fr; }
     }
   </style>
-<!-- deploy:1774924394 --></head>
+<!-- deploy:1774924741 --></head>
 <body>
 <header>
   <div>
@@ -412,7 +412,7 @@
 const SHEET_ID  = '1hLwdo0GoJmoJOBD-8krJd7hsai8mExWDveZgh1vwc3A';
 const GID       = '0';
 const CSV_URL   = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${GID}`;
-const CACHE_KEY = 'oshikara_filter_v6';
+const CACHE_KEY = 'oshikara_filter_v7';
 const TTL_MS    = 30 * 60 * 1000;
 const ALL_TAGS  = ['カラオケ','バラード・感涙','アニメ・映画','ハモり','オーケストラ'];
 
@@ -451,6 +451,9 @@ function toSongs(rows) {
   const tensionCol = find('テンション');
   const kuruKaraCol = find('くるカラ');
   const utaeruCol = find('歌える');
+  console.log('ヘッダー:', hdr);
+  console.log('tagCols:', tagCols);
+  console.log('kuruKaraCol:', kuruKaraCol, 'utaeruCol:', utaeruCol);
   return rows.slice(1).map(r => {
     const title      = titleCol>=0  ? r[titleCol]?.trim()||''  : '';
     const artist     = artistCol>=0 ? r[artistCol]?.trim()||'' : '';
