@@ -231,6 +231,8 @@
     }
     .modal-tag-cb:checked + .modal-tag-label { background: linear-gradient(135deg, #be185d, #ec4899); color: white; border-color: transparent; }
     .modal-actions { display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end; }
+    .modal-hide { padding: 9px 20px; border-radius: 8px; border: 1.5px solid #fca5a5; background: white; color: #dc2626; cursor: pointer; font-size: 0.9rem; font-family: inherit; margin-right: auto; }
+    .modal-hide:hover { background: #fff5f5; }
     .modal-cancel {
       padding: 9px 20px; border-radius: 8px; border: 1.5px solid #e0d4f7;
       background: white; color: #7c3aed;
@@ -261,7 +263,7 @@
       .song-grid { grid-template-columns: 1fr; }
     }
   </style>
-<!-- deploy:1774928030 --></head>
+<!-- deploy:1774928606 --></head>
 <body>
 <header>
   <div>
@@ -340,6 +342,7 @@
     </div>
     <div class="modal-msg" id="editModalMsg"></div>
     <div class="modal-actions">
+      <button class="modal-hide" onclick="hideCard()">非表示にする</button>
       <button class="modal-cancel" onclick="closeEditModal()">キャンセル</button>
       <button class="modal-submit" id="editSubmitBtn" onclick="submitEdit()">保存する</button>
     </div>
@@ -410,7 +413,7 @@
 
 <script>
 const GAS_URL   = 'https://script.google.com/macros/s/AKfycbxnB7W5GF1BCVi952DYrbFrIwy8dRe-uUKhal0sV7Obqe3YEtiwZG72hr9iaP2v7DCq/exec';
-const CACHE_KEY = 'oshikara_filter_v9';
+const CACHE_KEY = 'oshikara_filter_v10';
 const TTL_MS    = 5 * 60 * 1000;
 const ALL_TAGS  = ['カラオケ','バラード・感涙','アニメ・映画','ハモり','オーケストラ'];
 
@@ -470,6 +473,7 @@ function toSongs(rows) {
 }
 
 const EDIT_GAS_URL = GAS_URL;
+const DELETE_TAG   = 'カラオケ';
 
 let SONGS=[], fetching=false, renderedSongs=[], editingSong=null;
 
@@ -761,6 +765,24 @@ async function submitEdit() {
     showEditMsg('通信エラーが発生しました', 'err');
   } finally {
     btn.disabled = false; btn.textContent = '保存する';
+  }
+}
+
+async function hideCard() {
+  if (!editingSong) return;
+  const url = `${EDIT_GAS_URL}?token=oshikara-edit&title=${encodeURIComponent(editingSong.title)}&artist=${encodeURIComponent(editingSong.artist)}&data=${encodeURIComponent(JSON.stringify({[DELETE_TAG]: ''}))}`;
+  showEditMsg('処理中...', 'ok');
+  try {
+    const res  = await fetch(url);
+    const json = await res.json();
+    if (json.success) {
+      showEditMsg('✅ 非表示にしました', 'ok');
+      setTimeout(() => { closeEditModal(); loadData(true); }, 1200);
+    } else {
+      showEditMsg(json.error || '失敗しました', 'err');
+    }
+  } catch {
+    showEditMsg('通信エラーが発生しました', 'err');
   }
 }
 
