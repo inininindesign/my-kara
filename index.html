@@ -261,7 +261,7 @@
       .song-grid { grid-template-columns: 1fr; }
     }
   </style>
-<!-- deploy:1774926590 --></head>
+<!-- deploy:1774928030 --></head>
 <body>
 <header>
   <div>
@@ -409,11 +409,9 @@
 </div>
 
 <script>
-const SHEET_ID  = '1hLwdo0GoJmoJOBD-8krJd7hsai8mExWDveZgh1vwc3A';
-const GID       = '0';
-const CSV_URL   = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${GID}`;
-const CACHE_KEY = 'oshikara_filter_v8';
-const TTL_MS    = 30 * 60 * 1000;
+const GAS_URL   = 'https://script.google.com/macros/s/AKfycbxnB7W5GF1BCVi952DYrbFrIwy8dRe-uUKhal0sV7Obqe3YEtiwZG72hr9iaP2v7DCq/exec';
+const CACHE_KEY = 'oshikara_filter_v9';
+const TTL_MS    = 5 * 60 * 1000;
 const ALL_TAGS  = ['カラオケ','バラード・感涙','アニメ・映画','ハモり','オーケストラ'];
 
 function hashStr(s) { let h=5381; for(let i=0;i<s.length;i++) h=Math.imul(h,33)^s.charCodeAt(i); return (h>>>0).toString(36); }
@@ -471,7 +469,7 @@ function toSongs(rows) {
   }).filter(Boolean);
 }
 
-const EDIT_GAS_URL = 'https://script.google.com/macros/s/AKfycbxBA9cnifIWB-gPqSLXoESLpMQIdpRM8XggaPaMoRPXcZcbcbCSecDGP91wO3MHu_rm/exec';
+const EDIT_GAS_URL = GAS_URL;
 
 let SONGS=[], fetching=false, renderedSongs=[], editingSong=null;
 
@@ -484,14 +482,16 @@ async function loadData(force=false) {
   if(cache && !force) { SONGS=cache.songs; showApp(); setStatus('rgba(255,255,255,0.7)', '確認中...', true); }
   fetching=true;
   try {
-    const res = await fetch(CSV_URL);
+    const res = await fetch(`${GAS_URL}?token=oshikara-read`);
     if(!res.ok) throw new Error(res.status);
-    const text = await res.text();
+    const data = await res.json();
+    if(!data.success) throw new Error(data.error);
+    const text = JSON.stringify(data.rows);
     const h = hashStr(text);
     if(cache && cache.hash===h) {
       putCache({...cache, fetchedAt:Date.now()}); setStatus('#6ee7b7', '変更なし');
     } else {
-      SONGS = toSongs(parseCSV(text));
+      SONGS = toSongs(data.rows);
       putCache({songs:SONGS, hash:h, fetchedAt:Date.now()}); setStatus('#6ee7b7', '更新済み'); showApp();
     }
   } catch(e) {
