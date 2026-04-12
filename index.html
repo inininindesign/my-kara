@@ -214,7 +214,14 @@
       width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto;
       box-shadow: 0 24px 64px rgba(0,0,0,0.25);
     }
-    .modal h2 { font-size: 1.15rem; margin-bottom: 20px; color: #1a0050; }
+    .modal-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 20px; }
+    .modal h2 { font-size: 1.15rem; color: #1a0050; margin: 0; }
+    .modal-edit-toggle {
+      background: none; border: 1.5px solid #e0d4f7; border-radius: 8px;
+      width: 34px; height: 34px; cursor: pointer; font-size: 0.95rem;
+      color: #9575c9; flex-shrink: 0; transition: all 0.18s; line-height: 1;
+    }
+    .modal-edit-toggle:hover { background: #faf5ff; border-color: #7c3aed; }
     .modal-field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 14px; }
     .modal-field label { font-size: 0.68rem; font-weight: 700; color: #9575c9; text-transform: uppercase; letter-spacing: 0.07em; }
     .modal-field label .req { color: #be185d; }
@@ -226,6 +233,13 @@
     .modal-field input:focus, .modal-field select:focus { border-color: #7c3aed; background: #faf5ff; }
     .modal-field input::placeholder { color: #c4aff0; }
     .modal-field select option { background: white; color: #2d1b69; }
+    .modal-field input:disabled, .modal-field select:disabled {
+      background: #f8f5ff; border-color: transparent;
+      color: #2d1b69; opacity: 1; cursor: default;
+      -webkit-text-fill-color: #2d1b69;
+    }
+    .modal-tags-view { display: flex; flex-wrap: wrap; gap: 6px; }
+    #editModalTags.view-mode { pointer-events: none; }
     .modal-tags { display: flex; flex-wrap: wrap; gap: 6px; }
     .modal-tag-cb { display: none; }
     .modal-tag-label {
@@ -267,7 +281,7 @@
       .song-grid { grid-template-columns: 1fr; }
     }
   </style>
-<!-- deploy:1775962063 --></head>
+<!-- deploy:1775962325 --></head>
 <body>
 <header>
   <div>
@@ -328,7 +342,10 @@
 
 <div class="modal-overlay" id="editModal">
   <div class="modal">
-    <h2 id="editModalTitle">✏️ 曲を編集</h2>
+    <div class="modal-header">
+      <h2 id="editModalTitle"></h2>
+      <button class="modal-edit-toggle" id="editToggleBtn" onclick="enterEditMode()" title="編集">✏️</button>
+    </div>
     <div style="display:flex;gap:12px;">
       <div class="modal-field" style="flex:1">
         <label>テンション (1〜10)</label>
@@ -356,7 +373,7 @@
       <div class="modal-tags" id="editModalTags"></div>
     </div>
     <div class="modal-msg" id="editModalMsg"></div>
-    <div class="modal-actions">
+    <div class="modal-actions" id="editModalActions" style="display:none">
       <button class="modal-hide" onclick="hideCard()">非表示にする</button>
       <button class="modal-cancel" onclick="closeEditModal()">キャンセル</button>
       <button class="modal-submit" id="editSubmitBtn" onclick="submitEdit()">保存する</button>
@@ -738,7 +755,7 @@ function openEditModal(idx) {
   const s = renderedSongs[idx];
   if (!s) return;
   editingSong = s;
-  document.getElementById('editModalTitle').textContent = `✏️ ${s.title}`;
+  document.getElementById('editModalTitle').textContent = s.title;
   document.getElementById('ef_tension').value = s.tension || '';
   document.getElementById('ef_vocal').value = s.vocal || '';
   const tagsEl = document.getElementById('editModalTags');
@@ -746,12 +763,27 @@ function openEditModal(idx) {
     `<span><input type="checkbox" class="modal-tag-cb" id="et_${t}" value="${t}" ${s.tags.includes(t)?'checked':''}>
      <label class="modal-tag-label" for="et_${t}">${t}</label></span>`
   ).join('');
-  const urlInput = document.getElementById('ef_url');
-  const urlOpenBtn = document.getElementById('ef_url_open');
-  urlInput.value = s.url || '';
+  document.getElementById('ef_url').value = s.url || '';
   updateEditUrlBtn();
   document.getElementById('editModalMsg').textContent = '';
+  setViewMode();
   document.getElementById('editModal').classList.add('open');
+}
+
+function setViewMode() {
+  ['ef_tension','ef_vocal','ef_url'].forEach(id => document.getElementById(id).disabled = true);
+  document.querySelectorAll('#editModalTags .modal-tag-cb').forEach(cb => cb.disabled = true);
+  document.getElementById('editModalTags').classList.add('view-mode');
+  document.getElementById('editModalActions').style.display = 'none';
+  document.getElementById('editToggleBtn').style.display = '';
+}
+
+function enterEditMode() {
+  ['ef_tension','ef_vocal','ef_url'].forEach(id => document.getElementById(id).disabled = false);
+  document.querySelectorAll('#editModalTags .modal-tag-cb').forEach(cb => cb.disabled = false);
+  document.getElementById('editModalTags').classList.remove('view-mode');
+  document.getElementById('editModalActions').style.display = 'flex';
+  document.getElementById('editToggleBtn').style.display = 'none';
 }
 
 function closeEditModal() {
