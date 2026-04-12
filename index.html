@@ -131,11 +131,13 @@
       transition: transform 0.18s, box-shadow 0.18s;
       border-left: 4px solid #e0d4f7;
       position: relative; overflow: hidden;
+      cursor: pointer;
     }
     .song-card:hover {
       transform: translateY(-3px);
       box-shadow: 0 16px 40px rgba(0,0,0,0.2);
     }
+    .song-card:active { transform: scale(0.98); }
     .song-card.vocal-male   { border-left-color: #60a5fa; }
     .song-card.vocal-female { border-left-color: #f472b6; }
     .song-card.vocal-double { border-left-color: #c084fc; }
@@ -156,15 +158,6 @@
     .vocal-female .side-vocal { background: #fce7f3; color: #9d174d; }
     .vocal-double .side-vocal { background: #ede9fe; color: #5b21b6; }
 
-    .edit-btn {
-      position: absolute; top: 8px; right: 8px;
-      background: none; border: none; cursor: pointer;
-      font-size: 0.82rem; opacity: 0; padding: 3px; line-height: 1;
-      transition: opacity 0.18s; z-index: 1;
-    }
-    .song-card:hover .edit-btn { opacity: 0.5; }
-    .edit-btn:hover { opacity: 1 !important; }
-
     .song-title  { font-size: 1.15rem; font-weight: 700; margin: 0 0 4px; color: #1a0050; line-height: 1.35; }
     .song-artist { font-size: 0.95rem; color: #6d4c9e; margin-bottom: 8px; font-weight: 500; }
     .song-tags   { display: flex; flex-wrap: wrap; gap: 4px; }
@@ -182,15 +175,16 @@
     .tag-オーケストラ { background: #fef9c3; color: #854d0e; border-color: #fde68a; }
 
     .yt-link {
-      display: inline-flex; align-items: center; justify-content: center;
-      width: 28px; height: 20px; border-radius: 5px;
-      background: #ff0000; color: white; font-size: 0.65rem; font-weight: 700;
-      text-decoration: none; transition: opacity 0.2s; flex-shrink: 0;
-      line-height: 1;
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 5px 11px; border-radius: 8px;
+      background: #ff0000; color: white; font-size: 0.75rem; font-weight: 700;
+      text-decoration: none; transition: opacity 0.2s, transform 0.15s;
+      line-height: 1; white-space: nowrap;
     }
-    .yt-link:hover { opacity: 0.8; }
-    .yt-link svg { width: 12px; height: 12px; fill: white; }
-    .card-url-row { margin-top: 6px; }
+    .yt-link:hover { opacity: 0.85; }
+    .yt-link:active { transform: scale(0.95); opacity: 0.75; }
+    .yt-link svg { width: 13px; height: 13px; fill: white; flex-shrink: 0; }
+    .card-url-row { margin-top: 8px; }
 
     .tension-lo { color: #3b82f6; }
     .tension-md { color: #f59e0b; }
@@ -273,7 +267,7 @@
       .song-grid { grid-template-columns: 1fr; }
     }
   </style>
-<!-- deploy:1775961766 --></head>
+<!-- deploy:1775962063 --></head>
 <body>
 <header>
   <div>
@@ -648,9 +642,8 @@ function render() {
     const sideTension = s.tension ? `<div class="tension-big ${tc}">${s.tension}</div>` : '';
     const hasRight = sideTension || sideYear || sideVocal;
     const side = hasRight ? `<div class="card-side">${sideTension}${sideYear}${sideVocal}</div>` : '';
-    const ytIcon = s.url ? `<div class="card-url-row"><a class="yt-link" href="${s.url}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="YouTubeで聴く"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19.59 6.69a4.83 4.83 0 0 0-3.77-2.38C13.75 4.09 12 4 12 4s-1.75.09-3.82.31a4.83 4.83 0 0 0-3.77 2.38A11.31 11.31 0 0 0 4 12a11.31 11.31 0 0 0 .41 5.31 4.83 4.83 0 0 0 3.77 2.38C10.25 19.91 12 20 12 20s1.75-.09 3.82-.31a4.83 4.83 0 0 0 3.77-2.38A11.31 11.31 0 0 0 20 12a11.31 11.31 0 0 0-.41-5.31zM10 15V9l5 3-5 3z"/></svg></a></div>` : '';
-    return `<div class="song-card ${vc}">
-      <button class="edit-btn" onclick="event.stopPropagation();openEditModal(${i})" title="編集">✏️</button>
+    const ytIcon = s.url ? `<div class="card-url-row"><a class="yt-link" href="${s.url}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="YouTubeで聴く"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19.59 6.69a4.83 4.83 0 0 0-3.77-2.38C13.75 4.09 12 4 12 4s-1.75.09-3.82.31a4.83 4.83 0 0 0-3.77 2.38A11.31 11.31 0 0 0 4 12a11.31 11.31 0 0 0 .41 5.31 4.83 4.83 0 0 0 3.77 2.38C10.25 19.91 12 20 12 20s1.75-.09 3.82-.31a4.83 4.83 0 0 0 3.77-2.38A11.31 11.31 0 0 0 20 12a11.31 11.31 0 0 0-.41-5.31zM10 15V9l5 3-5 3z"/></svg>YouTube</a></div>` : '';
+    return `<div class="song-card ${vc}" onclick="openEditModal(${i})">
       <div class="card-body">
         <div class="card-main">
           <div class="song-title">${s.title}</div>
