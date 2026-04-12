@@ -181,6 +181,16 @@
     .tag-ハモり       { background: #f3e8ff; color: #6b21a8; border-color: #e9d5ff; }
     .tag-オーケストラ { background: #fef9c3; color: #854d0e; border-color: #fde68a; }
 
+    .yt-link {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 28px; height: 20px; border-radius: 5px;
+      background: #ff0000; color: white; font-size: 0.65rem; font-weight: 700;
+      text-decoration: none; transition: opacity 0.2s; flex-shrink: 0;
+      line-height: 1;
+    }
+    .yt-link:hover { opacity: 0.8; }
+    .yt-link svg { width: 12px; height: 12px; fill: white; }
+    .card-url-row { margin-top: 6px; }
 
     .tension-lo { color: #3b82f6; }
     .tension-md { color: #f59e0b; }
@@ -263,7 +273,7 @@
       .song-grid { grid-template-columns: 1fr; }
     }
   </style>
-<!-- deploy:1774932640 --></head>
+<!-- deploy:1775961766 --></head>
 <body>
 <header>
   <div>
@@ -307,6 +317,10 @@
       </select>
     </div>
     <div class="modal-field">
+      <label>YouTube URL</label>
+      <input type="url" id="f_url" placeholder="https://www.youtube.com/watch?v=...">
+    </div>
+    <div class="modal-field">
       <label>タグ</label>
       <div class="modal-tags" id="modalTags"></div>
     </div>
@@ -334,6 +348,13 @@
           <option value="女性">女性</option>
           <option value="ダブル">ダブル</option>
         </select>
+      </div>
+    </div>
+    <div class="modal-field">
+      <label>YouTube URL</label>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <input type="url" id="ef_url" placeholder="https://www.youtube.com/watch?v=..." style="flex:1;min-width:0;">
+        <a id="ef_url_open" href="#" target="_blank" rel="noopener" style="display:none;padding:8px 12px;background:#ff0000;color:white;border-radius:8px;font-size:0.82rem;text-decoration:none;white-space:nowrap;font-weight:600;">▶ 開く</a>
       </div>
     </div>
     <div class="modal-field">
@@ -413,7 +434,7 @@
 
 <script>
 const GAS_URL   = 'https://script.google.com/macros/s/AKfycbxnB7W5GF1BCVi952DYrbFrIwy8dRe-uUKhal0sV7Obqe3YEtiwZG72hr9iaP2v7DCq/exec';
-const CACHE_KEY = 'oshikara_filter_v12';
+const CACHE_KEY = 'oshikara_filter_v13';
 const TTL_MS    = 5 * 60 * 1000;
 const ALL_TAGS  = ['カラオケ','バラード・感涙','アニメ・映画','ハモり','オーケストラ'];
 
@@ -452,6 +473,7 @@ function toSongs(rows) {
   const tensionCol = find('テンション');
   const kuruKaraCol = find('くるカラ');
   const utaeruCol = find('歌える');
+  const urlCol = find('URL', 'url', 'Youtube', 'YouTube');
 
   return rows.slice(1).map(r => {
     const title      = titleCol>=0  ? r[titleCol]?.trim()||''  : '';
@@ -466,6 +488,7 @@ function toSongs(rows) {
       vocal:  vCol>=0 ? r[vCol]?.trim()||'' : '',
       kuruKara: kuruKaraCol>=0 ? !!r[kuruKaraCol]?.trim() : false,
       utaeru:   utaeruCol>=0  ? !!r[utaeruCol]?.trim()  : false,
+      url:     urlCol>=0 ? r[urlCol]?.trim()||'' : '',
     };
   }).filter(Boolean);
 }
@@ -625,6 +648,7 @@ function render() {
     const sideTension = s.tension ? `<div class="tension-big ${tc}">${s.tension}</div>` : '';
     const hasRight = sideTension || sideYear || sideVocal;
     const side = hasRight ? `<div class="card-side">${sideTension}${sideYear}${sideVocal}</div>` : '';
+    const ytIcon = s.url ? `<div class="card-url-row"><a class="yt-link" href="${s.url}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="YouTubeで聴く"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19.59 6.69a4.83 4.83 0 0 0-3.77-2.38C13.75 4.09 12 4 12 4s-1.75.09-3.82.31a4.83 4.83 0 0 0-3.77 2.38A11.31 11.31 0 0 0 4 12a11.31 11.31 0 0 0 .41 5.31 4.83 4.83 0 0 0 3.77 2.38C10.25 19.91 12 20 12 20s1.75-.09 3.82-.31a4.83 4.83 0 0 0 3.77-2.38A11.31 11.31 0 0 0 20 12a11.31 11.31 0 0 0-.41-5.31zM10 15V9l5 3-5 3z"/></svg></a></div>` : '';
     return `<div class="song-card ${vc}">
       <button class="edit-btn" onclick="event.stopPropagation();openEditModal(${i})" title="編集">✏️</button>
       <div class="card-body">
@@ -632,6 +656,7 @@ function render() {
           <div class="song-title">${s.title}</div>
           <div class="song-artist">${s.artist}</div>
           ${pills?`<div class="song-tags">${pills}</div>`:''}
+          ${ytIcon}
         </div>
         ${side}
       </div>
@@ -668,7 +693,7 @@ function openAddModal() {
 
 function closeAddModal() {
   document.getElementById('addModal').classList.remove('open');
-  ['f_title','f_artist','f_year','f_tension'].forEach(id => document.getElementById(id).value='');
+  ['f_title','f_artist','f_year','f_tension','f_url'].forEach(id => document.getElementById(id).value='');
   document.getElementById('f_vocal').value='';
 }
 
@@ -684,6 +709,8 @@ async function submitSong() {
   if(year)    data['発売年'] = parseInt(year);
   if(tension) data['テンション'] = parseInt(tension);
   if(vocal)   data['ボーカル'] = vocal;
+  const url = document.getElementById('f_url').value.trim();
+  if(url) data['URL'] = url;
   document.querySelectorAll('.modal-tag-cb:checked').forEach(cb => { data[cb.value] = cb.value; });
 
   const btn = document.getElementById('submitBtn');
@@ -726,6 +753,10 @@ function openEditModal(idx) {
     `<span><input type="checkbox" class="modal-tag-cb" id="et_${t}" value="${t}" ${s.tags.includes(t)?'checked':''}>
      <label class="modal-tag-label" for="et_${t}">${t}</label></span>`
   ).join('');
+  const urlInput = document.getElementById('ef_url');
+  const urlOpenBtn = document.getElementById('ef_url_open');
+  urlInput.value = s.url || '';
+  updateEditUrlBtn();
   document.getElementById('editModalMsg').textContent = '';
   document.getElementById('editModal').classList.add('open');
 }
@@ -740,6 +771,7 @@ async function submitEdit() {
   const data = {
     'テンション': document.getElementById('ef_tension').value ? parseInt(document.getElementById('ef_tension').value) : '',
     'ボーカル':   document.getElementById('ef_vocal').value,
+    'URL':        document.getElementById('ef_url').value.trim(),
   };
   ALL_TAGS.forEach(tag => {
     data[tag] = document.getElementById('et_' + tag)?.checked ? tag : '';
@@ -792,6 +824,14 @@ function showEditMsg(msg, type) {
 document.getElementById('editModal').addEventListener('click', e => {
   if (e.target === document.getElementById('editModal')) closeEditModal();
 });
+
+document.getElementById('ef_url').addEventListener('input', updateEditUrlBtn);
+function updateEditUrlBtn() {
+  const v = document.getElementById('ef_url').value.trim();
+  const btn = document.getElementById('ef_url_open');
+  if (v) { btn.href = v; btn.style.display = ''; }
+  else { btn.style.display = 'none'; }
+}
 
 loadData();
 </script>
